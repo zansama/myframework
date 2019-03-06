@@ -1,0 +1,19 @@
+{
+    "name": "utilisateur/myframework",
+    "license": "MIT",
+    "description": "Créer mon premier framework en PHP POO MVC",
+    "authors": [
+        {
+            "name": "zan",
+            "email": "clement.mortas@le-campus-numerique.fr"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core",
+            "App\\": "src"
+        }
+    }
+}
