@@ -5,7 +5,9 @@
  * Date: 06/03/2019
  * Time: 11:10
  */
+
 namespace Core;
+
 class Request
 {
     private $post;
@@ -27,9 +29,11 @@ class Request
         $this->session = $session;
     }
 
-    static public function createFromGlobals() {
+
+    static public function createFromGlobals()
+    {
         session_start();
-         return new Request($_POST, $_GET, $_FILES, $_REQUEST, $_SERVER, $_COOKIE, $_SESSION);
+        return new Request($_POST, $_GET, $_FILES, $_REQUEST, $_SERVER, $_COOKIE, $_SESSION);
     }
 
     /**
