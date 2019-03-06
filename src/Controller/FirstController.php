@@ -31,4 +31,8 @@ class FirstController extends AppController{
 
     }
 
+    public function  redirection($bar){
+        $this->redirect("testsBar", ["param" => $bar]);
+    }
+
 }

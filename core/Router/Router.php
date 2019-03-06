@@ -91,6 +91,37 @@ class Router
         throw new \Exception("cette route n'existe pas!");
 
     }
+    /**
+
+     * @param string $routeName
+
+     * @return Route
+
+     * @throws \Exception
+
+     */
+
+    public function getRoute($routeName)
+
+    {
+
+        // Si la route existe (teste sur le nom) alors on renvoie la route en question
+
+        if(isset($this->routes[$routeName])) {
+
+            return $this->routes[$routeName];
+
+        }
+
+
+
+        // Sinon on soulève une erreur
+
+        throw new \Exception("Cette route n'existe pas !");
+
+    }
+
+
 
 
 }

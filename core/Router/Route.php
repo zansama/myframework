@@ -1,7 +1,15 @@
 <?php
 
 
+
 namespace Core\Router;
+
+
+
+
+
+use Core\Request;
+
 
 
 class Route
@@ -9,50 +17,71 @@ class Route
 {
 
 
+
     /**
+
      * @var string
+
      */
 
     private $name;
 
     /**
+
      * @var string
+
      */
 
     private $path;
 
     /**
+
      * @var array
+
      */
 
     private $parameters;
 
     /**
+
      * @var string
+
      */
 
     private $controller;
 
     /**
+
      * @var string
+
      */
 
     private $action;
 
     /**
+
      * @var array
+
      */
 
     private $args;
 
 
+
     /**
+
      * Route constructor.
+
      * @param string $name
+
      * @param string $path
+
      * @param array $parameters
+
      * @param string $controller
+
      * @param string $action
+
      */
 
     public function __construct($name, $path, array $parameters, $controller, $action)
@@ -72,11 +101,14 @@ class Route
     }
 
 
+
     /**
+
      * @return mixed
+
      */
 
-    public function call()
+    public function call($request, $router)
 
     {
 
@@ -84,7 +116,7 @@ class Route
 
         // On instancie dynamiquement le contrôleur
 
-        $controller = new $controller();
+        $controller = new $controller($request, $router);
 
         // call_user_func_array permet d'appeler une méthode (ou une fonction, cf la doc) d'une classe et de lui passer des arguments
 
@@ -93,9 +125,13 @@ class Route
     }
 
 
+
     /**
+
      * @param string $requestUri
+
      * @return bool
+
      */
 
     public function match($requestUri)
@@ -108,11 +144,11 @@ class Route
 
         // On échappe chaque "/" pour que notre regexp puisse reconnaître le "/"
 
-        $path = str_replace("/", "\/", $path);
+        $path = str_replace("/","\/", $path);
 
         // Si notre requpete actuelle ne correspond pas à la regexp alons on renvoie false
 
-        if (!preg_match("/^$path$/i", $requestUri, $matches)) {
+        if(!preg_match("/^$path$/i", $requestUri, $matches)){
 
             return false;
 
@@ -120,15 +156,18 @@ class Route
 
         // Sinon on remplit notre tableau d'arguments avec les valeurs de chaque paramètre de notre route
 
-        $this->args = array_slice($matches, 1);
+        $this->args = array_slice($matches,1);
 
         return true;
 
     }
 
     /**
+
      * @param $match
+
      * @return string
+
      */
 
     private function parameterMatch($match)
@@ -137,9 +176,9 @@ class Route
 
         // Si nous avons bien définie notre paramètre alors on renvoie la regexp associé
 
-        if (isset($this->parameters[$match[1]])) {
+        if(isset($this->parameters[$match[1]])) {
 
-            return sprintf("(%s)", $this->parameters[$match[1]]);
+            return sprintf("(%s)",$this->parameters[$match[1]]);
 
         }
 
@@ -149,8 +188,38 @@ class Route
 
     }
 
+
+
     /**
+
+     * @param $args
+
      * @return string
+
+     */
+
+    public function generateUrl($args)
+
+    {
+
+        // On remplace chaque paramètre du chemin par les arguments transmis
+
+        $url = str_replace(array_keys($args), $args, $this->path);
+
+        // On supprime les ":"
+
+        $url = str_replace(":", "", $url);
+
+        return $url;
+
+    }
+
+
+
+    /**
+
+     * @return string
+
      */
 
     public function getName()
@@ -162,7 +231,9 @@ class Route
     }
 
     /**
+
      * @return string
+
      */
 
     public function getPath()
@@ -174,7 +245,9 @@ class Route
     }
 
     /**
+
      * @return array
+
      */
 
     public function getParameters()
@@ -186,7 +259,9 @@ class Route
     }
 
     /**
+
      * @return string
+
      */
 
     public function getController()
@@ -198,7 +273,9 @@ class Route
     }
 
     /**
+
      * @return string
+
      */
 
     public function getAction()
@@ -208,6 +285,7 @@ class Route
         return $this->action;
 
     }
+
 
 
 }
