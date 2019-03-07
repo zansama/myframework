@@ -90,11 +90,15 @@ class Request
     }
 
     /**
+     * @param null|string $key
      * @return mixed
      */
-    public function getSession()
+    public function getSession($key = null)
     {
-        return $this->session;
+        if (is_null($key))
+            return $this->session;
+
+        return $this->session[$key];
     }
 
 }

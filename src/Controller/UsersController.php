@@ -13,33 +13,24 @@ class UsersController extends AppController
 {
     public function index(){
 
+        AuthComponent::checkAuthenticated($this->request, $this->router->getRoute('login'));
 
-        if (AuthComponent::checkAuthenticated()) {
-
-            return $this->render('users.index');
-
-        } else {
-            return $this->redirect('login');
-        }
-
-
-
+        $this->render('users.index');
     }
+
     public function login(){
-        if (AuthComponent::create() === true) {
-            echo  $this->redirect('index');
+        if (AuthComponent::create($this->request, $this->router->getRoute('index') ) === true) {
 
-        } else {
-
-            return $this->render('users.login');
-
+            $this->render('index');
 //            // puis on le redirige vers la page d'accueil
 //            echo '<meta http-equiv="refresh" content="0;URL=login">';
+        }else{
+        $this->render('users.login');
 
-        }
+        }}
 
 
-    }
+
     public function logout(){
         session_destroy();
 
