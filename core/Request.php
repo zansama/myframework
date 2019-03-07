@@ -69,11 +69,16 @@ class Request
     }
 
     /**
+     * @param null|string $key
      * @return mixed
      */
-    public function getServer()
+    public function getServer($key = null)
     {
-        return $this->server;
+        if (is_null($key)) {
+            return $this->server;
+        }
+
+        return $this->server[$key];
     }
 
     /**

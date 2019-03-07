@@ -9,26 +9,16 @@
 namespace App\Controller;
 
 
-
-
 class FirstController extends AppController{
 
     public function foo()
-
     {
-
-        echo 'Hello world !';
-
+       return $this->render('test');
     }
 
-
-
     public function bar($bar)
-
     {
-
-        echo $bar;
-
+        return $this->render('bar', compact('bar'));
     }
 
     public function  redirection($bar){
