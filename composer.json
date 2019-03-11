@@ -10,7 +10,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "duncan3dc/blade": "dev-master"
+        "duncan3dc/blade": "dev-master",
+        "php-di/php-di": "dev-master"
     },
     "autoload": {
         "psr-4": {

@@ -7,33 +7,48 @@
  */
 
 namespace App\Controller;
+
 use Core\AuthComponent;
+use Core\Request;
+use Core\Router\Route;
 
 class UsersController extends AppController
 {
-    public function index(){
+    public function index()
+    {
+       AuthComponent::checkAuthenticated($this->request);
 
-        AuthComponent::checkAuthenticated($this->request, $this->router->getRoute('login'));
+       if (AuthComponent::checkAuthenticated($this->request) === true) {
+           $this->render('users.index');
 
-        $this->render('users.index');
+       }else{
+
+       $this->redirect('login');
+       }
     }
 
-    public function login(){
-        if (AuthComponent::create($this->request, $this->router->getRoute('index') ) === true) {
+    public function login()
+    {
+        $email = 'le-campus-numerique@in-the-alps.fr';
+        $password = '1234';
 
-            $this->render('index');
-//            // puis on le redirige vers la page d'accueil
-//            echo '<meta http-equiv="refresh" content="0;URL=login">';
-        }else{
+        if (AuthComponent::checkAuthenticated($this->request, $this->router->getRoute('login'))) {
+            AuthComponent::redirect($this->router->getRoute('index'), []);
+        }
+        if (($this->request->getPost('email') === $email) && ($this->request->getPost('password') === $password)) {
+        AuthComponent::create();
+            $this->redirect('index');
+        }
         $this->render('users.login');
-
-        }}
-
+    }
 
 
-    public function logout(){
-        session_destroy();
+    /**
+     * @throws \Exception
+     */
+    public function logout()
+    {
+        AuthComponent::delete($this->request, $this->router->getRoute('login'));
 
-        return $this->redirect('login');
     }
 }

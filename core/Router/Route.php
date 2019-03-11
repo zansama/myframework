@@ -109,17 +109,11 @@ class Route
      */
 
     public function call($request, $router)
-
     {
-
         $controller = $this->controller;
-
         // On instancie dynamiquement le contrôleur
-
         $controller = new $controller($request, $router);
-
         // call_user_func_array permet d'appeler une méthode (ou une fonction, cf la doc) d'une classe et de lui passer des arguments
-
         return call_user_func_array([$controller, $this->action], $this->args);
 
     }

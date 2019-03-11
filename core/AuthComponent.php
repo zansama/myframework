@@ -8,40 +8,55 @@
 
 namespace Core;
 
-use Core\Request;
 use Core\Router\Route;
-use function mysql_xdevapi\getSession;
 
 class AuthComponent
 {
 
-    static public function checkAuthenticated(Request $request, Route $route, $args = [])
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    static public function checkAuthenticated(Request $request)
     {
-        $email = 'le-campus-numerique@in-the-alps.fr';
-        $password = 'LeCampusNumerique@2019';
+        $session = $request->getSession('is_connected');
 
-        if ($request->getSession('email') !== $email || $request->getSession('password') !== $password) {
+        if (!isset($session)) {
+            return false;
+        }elseif (isset($session)){
+            setcookie('PHPSESSID', $_COOKIE['PHPSESSID'], time()+3600);
+        }
+        elseif ($_COOKIE['PHPSESSID'] === $session){
+
+            return true;
+        }
+
+        return true;
+    }
+
+
+    /**
+     *
+     */
+    static public function create()
+    {
+        $_SESSION['is_connected'] = true;
+    }
+
+    /**
+     * @param Request $request
+     * @param Route $route
+     * @param array $args
+     */
+    static public function delete(Request $request, Route $route, $args = [])
+    {
+        $session = $request->getSession('is_connected');
+        if (isset($session)){
+            session_destroy();
+            unset($_COOKIE['PHPSESSID']);
+
             self::redirect($route, ['param' => $args]);
         }
-    }
-
-
-    static public function create(Request $request, Route $route, $args = [])
-    {
-
-//        $request = Request::createFromGlobals();
-        $email = 'le-campus-numerique@in-the-alps.fr';
-        $password = 'LeCampusNumerique@2019';
-
-        if ($request->getPost('email') === $email && $request->getPost('password') === $password) {
-           return true;
-
-        }
-    }
-
-    static public function delete(Route $route)
-    {
-
     }
 
     /**

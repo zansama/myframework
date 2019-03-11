@@ -37,11 +37,20 @@ class Request
     }
 
     /**
-     * @return mixed
+     * @param null|string $key
+     * @return null|string|array
      */
-    public function getPost()
+    public function getPost($key = null)
     {
-        return $this->post;
+        if (is_null($key)) {
+            return $this->post;
+        }
+
+        if (isset($this->post[$key])) {
+            return $this->post[$key];
+        }
+
+        return null;
     }
 
     /**
@@ -98,7 +107,10 @@ class Request
         if (is_null($key))
             return $this->session;
 
-        return $this->session[$key];
+        if (isset($this->session[$key])) {
+            return $this->session[$key];
+        }
+        return null;
     }
 
 }
